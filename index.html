@@ -1,143 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <title>For Swathu Kutty ❤️</title>
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: "Comic Sans MS", "Poppins", cursive;
-            overflow: hidden;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Chocolate Day 🍫</title>
 
-        .card {
-            background: white;
-            padding: 40px;
-            border-radius: 22px;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            width: 380px;
-        }
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
 
-        h1 {
-            color: #ff4d6d;
-            margin-bottom: 15px;
-        }
+body{
+  height:100vh;
+  overflow:hidden;
+  background:#f7e6cf;
+}
 
-        p {
-            font-size: 18px;
-            color: #444;
-        }
+/* ================= BACKGROUND HEARTS ================= */
+#bg{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  overflow:hidden;
+}
 
-        .buttons {
-            margin-top: 25px;
-            position: relative;
-            height: 80px;
-        }
+.bg-heart{
+  position:absolute;
+  font-size:2.4rem;
+  opacity:0.4;
+  animation:float linear infinite;
+}
 
-        button {
-            padding: 12px 25px;
-            font-size: 16px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            position: absolute;
-        }
+@keyframes float{
+  from{
+    transform:translateY(110vh) scale(0.8);
+    opacity:0;
+  }
+  20%{opacity:.45;}
+  to{
+    transform:translateY(-30vh) scale(1.3);
+    opacity:0;
+  }
+}
 
-        #yesBtn {
-            background: #ff4d6d;
-            color: white;
-            left: 50%;
-            transform: translateX(-110%);
-        }
+/* ================= CHOCOLATE ================= */
+#choco{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  cursor:grab;
+  z-index:10;
+}
 
-        #noBtn {
-            background: #ddd;
-            color: #333;
-            left: 50%;
-            transform: translateX(10%);
-        }
+#choco img{
+  width:260px;
+  max-width:70vw;
+  user-select:none;
+  pointer-events:none;
+}
 
-        #message {
-            margin-top: 20px;
-            color: #ff4d6d;
-            font-size: 18px;
-            display: none;
-        }
+/* ================= PULL TEXT ================= */
+#hint{
+  position:absolute;
+  top:-45px;
+  right:-110px;
+  font-size:1.1rem;
+  font-weight:600;
+  color:#5a2d0c;
+  animation:bounce 1.5s infinite;
+}
 
-        .heart {
-            position: absolute;
-            font-size: 20px;
-            animation: float 5s linear infinite;
-        }
+@keyframes bounce{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
 
-        @keyframes float {
-            0% {
-                transform: translateY(100vh);
-                opacity: 1;
-            }
+/* ================= REVEAL CONTENT ================= */
+#content{
+  position:absolute;
+  inset:0;
+  z-index:5;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  opacity:0;
+  padding:20px;
+}
 
-            100% {
-                transform: translateY(-10vh);
-                opacity: 0;
-            }
-        }
-    </style>
+#content.show{
+  opacity:1;
+  transition:opacity 1s ease;
+}
+
+#content h1{
+  font-size:clamp(1.8rem,4vw,2.6rem);
+  color:#5a2d0c;
+}
+
+#content p{
+  color:#5a2d0c;
+  margin:12px 0;
+  font-size:clamp(1rem,2.5vw,1.1rem);
+}
+
+/* ================= PHOTO + GLOW ================= */
+.photo-wrapper{
+  position:relative;
+  width:450px;
+  height:450px;
+  max-width:80vw;
+  max-height:80vw;
+  margin:20px 0;
+  z-index:6;
+}
+
+.photo-wrapper::before{
+  content:"";
+  position:absolute;
+  inset:-15px;
+  background:radial-gradient(circle, rgba(255,120,160,0.45), transparent 70%);
+  filter:blur(25px);
+  animation:pulse 3s ease-in-out infinite;
+  z-index:-1;
+}
+
+@keyframes pulse{
+  0%,100%{opacity:.6}
+  50%{opacity:1}
+}
+
+.photo{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:22px;
+  box-shadow:0 20px 35px rgba(0,0,0,.35);
+}
+
+/* ================= HEART BURST ================= */
+.burst-heart{
+  position:absolute;
+  font-size:1.4rem;
+  animation:burst 1.6s ease-out forwards;
+  pointer-events:none;
+}
+
+@keyframes burst{
+  0%{
+    transform:translate(0,0) scale(.5);
+    opacity:1;
+  }
+  100%{
+    transform:translate(var(--x),var(--y)) scale(1.3);
+    opacity:0;
+  }
+}
+
+/* ================= CHOCOLATE RAIN ================= */
+.choco{
+  position:absolute;
+  top:-40px;
+  font-size:2rem;
+  z-index:7;
+  animation:fall linear forwards;
+}
+
+@keyframes fall{
+  to{
+    transform:translateY(110vh);
+    opacity:0;
+  }
+}
+</style>
 </head>
 
 <body>
 
-    <div class="card">
-        <h1>Swathuuuu 💕</h1>
-        <p>Will you marry your Natta Kokku? 🥺👉👈</p>
+<!-- BACKGROUND -->
+<div id="bg"></div>
 
-        <div class="buttons">
-            <button id="yesBtn" onclick="sayYes()">Yes ❤️</button>
-            <button id="noBtn" onmouseover="moveNo()">No 🙃</button>
-        </div>
+<!-- CHOCOLATE -->
+<div id="choco">
+  <img src="chocolate.jpg">
+  <div id="hint">⬇️ Pull me ⬇️</div>
+</div>
 
-        <div id="message">
-            Gundu thakkali i know it 😌💖
-            You’re stuck with me forever, Swathuu ❤️
-            I love you soooo much 🥰
-        </div>
-    </div>
+<!-- CONTENT -->
+<div id="content">
+  <h1>Happy Chocolate Day, Swathi Kuttyyyyyy 🍫❤️</h1>
+  <p>
+    To my <b>Gundu Thakkali 🍅</b><br>
+    my favourite snackkkkkk😋😋😋    
+  </p>
 
-    <script>
-        function moveNo() {
-            const btn = document.getElementById("noBtn");
-            const x = Math.random() * 300 - 150;
-            const y = Math.random() * 150 - 75;
-            btn.style.transform = `translate(${x}px, ${y}px)`;
-        }
+  <div class="photo-wrapper" id="photoWrap">
+    <img class="photo" src="swathi.jpg" alt="Swathi">
+  </div>
 
-        function sayYes() {
-            document.getElementById("message").style.display = "block";
-            createHearts();
-        }
+  <p>
+    Hottest Chocolate😋😋😋…<br>
+    Eppo enaku kedaikumooooooo therilayeeeeeee😋😋😋😋😋😋
+  </p>
+</div>
 
-        function createHearts() {
-            for (let i = 0; i < 40; i++) {
-                const heart = document.createElement("div");
-                heart.className = "heart";
-                heart.innerHTML = "❤️";
-                heart.style.left = Math.random() * 100 + "vw";
-                heart.style.fontSize = (18 + Math.random() * 22) + "px";
-                heart.style.animationDuration = (3 + Math.random() * 3) + "s";
-                document.body.appendChild(heart);
+<script>
+const choco = document.getElementById("choco");
+const content = document.getElementById("content");
+const bg = document.getElementById("bg");
+const photoWrap = document.getElementById("photoWrap");
 
-                setTimeout(() => heart.remove(), 6000);
-            }
-        }
-    </script>
+let startY=0, currentY=0, dragging=false;
+
+/* DRAG (mouse + touch) */
+function startDrag(y){
+  dragging=true;
+  startY=y;
+  choco.style.cursor="grabbing";
+}
+function moveDrag(y){
+  if(!dragging) return;
+  currentY=y-startY;
+  if(currentY>0){
+    choco.style.transform=`translate(-50%,${currentY}px)`;
+  }
+}
+function endDrag(){
+  if(!dragging) return;
+  dragging=false;
+  choco.style.cursor="grab";
+
+  if(currentY>160){
+    choco.style.transition="transform 1s ease";
+    choco.style.transform="translate(-50%,120%)";
+    setTimeout(()=>{
+      choco.remove();
+      content.classList.add("show");
+      heartBurst();
+      startChocolateRain();
+    },600);
+  }else{
+    choco.style.transition="transform .4s ease";
+    choco.style.transform="translate(-50%,-50%)";
+  }
+  currentY=0;
+}
+
+choco.addEventListener("mousedown",e=>startDrag(e.clientY));
+window.addEventListener("mousemove",e=>moveDrag(e.clientY));
+window.addEventListener("mouseup",endDrag);
+
+choco.addEventListener("touchstart",e=>startDrag(e.touches[0].clientY));
+window.addEventListener("touchmove",e=>moveDrag(e.touches[0].clientY));
+window.addEventListener("touchend",endDrag);
+
+/* BACKGROUND HEARTS */
+const hearts=["❤️","💖","💗","💘","💕","💝"];
+function spawnBgHeart(){
+  const h=document.createElement("div");
+  h.className="bg-heart";
+  h.innerText=hearts[Math.floor(Math.random()*hearts.length)];
+  h.style.left=Math.random()*100+"vw";
+  h.style.animationDuration=8+Math.random()*8+"s";
+  bg.appendChild(h);
+  setTimeout(()=>h.remove(),18000);
+}
+for(let i=0;i<30;i++) spawnBgHeart();
+setInterval(spawnBgHeart,300);
+
+/* HEART BURST */
+function heartBurst(){
+  for(let i=0;i<16;i++){
+    const h=document.createElement("div");
+    h.className="burst-heart";
+    h.innerText="❤️";
+    h.style.left="50%";
+    h.style.top="50%";
+    h.style.setProperty("--x",(Math.random()*300-150)+"px");
+    h.style.setProperty("--y",(Math.random()*300-150)+"px");
+    photoWrap.appendChild(h);
+    setTimeout(()=>h.remove(),1600);
+  }
+}
+
+/* CHOCOLATE RAIN */
+function startChocolateRain(){
+  for(let i=0;i<40;i++){
+    setTimeout(()=>{
+      const c=document.createElement("div");
+      c.className="choco";
+      c.innerText="🍫";
+      c.style.left=Math.random()*100+"vw";
+      c.style.animationDuration=2+Math.random()*3+"s";
+      document.body.appendChild(c);
+      setTimeout(()=>c.remove(),5000);
+    },i*120);
+  }
+}
+</script>
 
 </body>
-
-
 </html>
