@@ -2,305 +2,333 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<title>Hug Me If You Can 🧸</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Chocolate Day 🍫</title>
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Segoe UI',sans-serif;
+:root{
+  --bg1:#ffeaf0;
+  --bg2:#f7cdd8;
+  --machine:#f9c6d6;
+  --border:#f2e1b8;
+  --panel:#ffdbe6;
+  --accent:#8a3c5c;
+  --heart:#c97b8b;
 }
+
+*{box-sizing:border-box;font-family:"Segoe UI",sans-serif}
 
 body{
+  margin:0;
   height:100vh;
+  background:radial-gradient(circle at top,var(--bg1),var(--bg2));
+  display:flex;
+  align-items:center;
+  justify-content:center;
   overflow:hidden;
-  background:#f7e6cf;
 }
 
-/* ================= BACKGROUND HEARTS ================= */
-#bg{
-  position:fixed;
+/* ================= GAME ================= */
+#game{
+  width:900px;
+  max-width:95vw;
+  aspect-ratio:16/9;
+  position:relative;
+}
+
+/* ================= MACHINE ================= */
+#machine{
+  position:absolute;
   inset:0;
-  z-index:1;
-  overflow:hidden;
+  background:var(--machine);
+  border-radius:28px;
+  border:12px solid var(--border);
+  box-shadow:0 30px 50px rgba(0,0,0,.18);
 }
 
-.bg-heart{
+/* ================= SCORE ================= */
+#score{
   position:absolute;
-  font-size:2.4rem;
-  opacity:0.4;
-  animation:float linear infinite;
-}
-
-@keyframes float{
-  from{
-    transform:translateY(110vh) scale(0.8);
-    opacity:0;
-  }
-  20%{opacity:.45;}
-  to{
-    transform:translateY(-30vh) scale(1.3);
-    opacity:0;
-  }
-}
-
-/* ================= CHOCOLATE ================= */
-#choco{
-  position:absolute;
-  top:50%;
+  top:-32px;
   left:50%;
-  transform:translate(-50%,-50%);
-  cursor:grab;
+  transform:translateX(-50%);
+  background:white;
+  padding:6px 20px;
+  border-radius:12px;
+  font-family:monospace;
+  font-size:1.4rem;
+  color:var(--accent);
+  box-shadow:0 0 18px rgba(255,120,170,.8);
   z-index:10;
 }
 
-#choco img{
-  width:260px;
-  max-width:70vw;
-  user-select:none;
-  pointer-events:none;
-}
-
-/* ================= PULL TEXT ================= */
-#hint{
+/* ================= PLATE ================= */
+#plate{
   position:absolute;
-  top:-45px;
-  right:-110px;
-  font-size:1.1rem;
+  top:14px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#fff0f5;
+  padding:8px 26px;
+  border-radius:20px;
   font-weight:600;
-  color:#5a2d0c;
-  animation:bounce 1.5s infinite;
+  color:var(--accent);
+  box-shadow:0 8px 14px rgba(0,0,0,.15);
+  z-index:10;
 }
 
-@keyframes bounce{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-10px)}
-}
-
-/* ================= REVEAL CONTENT ================= */
-#content{
+/* ================= PANEL ================= */
+#panel{
   position:absolute;
-  inset:0;
-  z-index:5;
+  left:6%;
+  right:6%;
+  top:22%;
+  bottom:10%;
+  background:var(--panel);
+  border-radius:22px;
+  box-shadow:inset 0 6px 12px rgba(0,0,0,.08);
+  overflow:hidden;
+}
+
+/* ================= HOLES ================= */
+.hole{
+  position:absolute;
+  width:84px;
+  height:84px;
   display:flex;
-  flex-direction:column;
   align-items:center;
   justify-content:center;
-  text-align:center;
-  opacity:0;
-  padding:20px;
-}
-
-#content.show{
-  opacity:1;
-  transition:opacity 1s ease;
-}
-
-#content h1{
-  font-size:clamp(1.8rem,4vw,2.6rem);
-  color:#5a2d0c;
-}
-
-#content p{
-  color:#5a2d0c;
-  margin:12px 0;
-  font-size:clamp(1rem,2.5vw,1.1rem);
-}
-
-/* ================= PHOTO + GLOW ================= */
-.photo-wrapper{
-  position:relative;
-  width:450px;
-  height:450px;
-  max-width:80vw;
-  max-height:80vw;
-  margin:20px 0;
-  z-index:6;
-}
-
-.photo-wrapper::before{
-  content:"";
-  position:absolute;
-  inset:-15px;
-  background:radial-gradient(circle, rgba(255,120,160,0.45), transparent 70%);
-  filter:blur(25px);
-  animation:pulse 3s ease-in-out infinite;
-  z-index:-1;
+  animation:pulse 3s infinite ease-in-out;
 }
 
 @keyframes pulse{
-  0%,100%{opacity:.6}
-  50%{opacity:1}
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.05)}
 }
 
-.photo{
+.hole::before,
+.hole::after{
+  content:"";
+  position:absolute;
+  width:42px;
+  height:64px;
+  background:var(--heart);
+  border-radius:50px 50px 0 0;
+  top:10px;
+}
+
+.hole::before{left:21px;transform:rotate(-45deg)}
+.hole::after{right:21px;transform:rotate(45deg)}
+
+.hole.active{
+  animation:none;
+  box-shadow:0 0 35px rgba(255,120,170,.6);
+}
+
+/* ================= PHOTO ================= */
+.hamster{
+  position:absolute;
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  overflow:hidden;
+  transform:scale(0);
+  transition:.25s ease;
+  z-index:2;
+}
+
+.hamster img{
   width:100%;
   height:100%;
   object-fit:cover;
-  border-radius:22px;
-  box-shadow:0 20px 35px rgba(0,0,0,.35);
+}
+
+.hamster.show{
+  transform:scale(1);
+}
+
+/* ================= POSITIONS ================= */
+#h1{top:12%;left:12%}
+#h2{top:12%;left:42%}
+#h3{top:12%;left:72%}
+#h4{top:42%;left:18%}
+#h5{top:42%;left:42%}
+#h6{top:42%;left:66%}
+#h7{top:70%;left:12%}
+#h8{top:70%;left:42%}
+#h9{top:70%;left:72%}
+#h10{top:56%;left:82%}
+
+/* ================= FLOAT TEXT ================= */
+.float-text{
+  position:absolute;
+  font-size:.9rem;
+  color:var(--accent);
+  animation:floatUp 1.2s ease forwards;
+  pointer-events:none;
+}
+
+@keyframes floatUp{
+  from{opacity:1;transform:translateY(0)}
+  to{opacity:0;transform:translateY(-30px)}
 }
 
 /* ================= HEART BURST ================= */
 .burst-heart{
   position:absolute;
-  font-size:1.4rem;
-  animation:burst 1.6s ease-out forwards;
+  font-size:18px;
+  animation:burst 900ms ease forwards;
   pointer-events:none;
 }
 
 @keyframes burst{
-  0%{
-    transform:translate(0,0) scale(.5);
-    opacity:1;
-  }
-  100%{
-    transform:translate(var(--x),var(--y)) scale(1.3);
-    opacity:0;
-  }
-}
-
-/* ================= CHOCOLATE RAIN ================= */
-.choco{
-  position:absolute;
-  top:-40px;
-  font-size:2rem;
-  z-index:7;
-  animation:fall linear forwards;
-}
-
-@keyframes fall{
   to{
-    transform:translateY(110vh);
+    transform:translate(var(--x),var(--y)) scale(0);
     opacity:0;
   }
+}
+
+/* ================= HEART RAIN ================= */
+.rain-heart{
+  position:fixed;
+  top:-30px;
+  font-size:20px;
+  animation:rain linear forwards;
+  pointer-events:none;
+}
+
+@keyframes rain{
+  to{
+    transform:translateY(110vh) rotate(360deg);
+    opacity:0;
+  }
+}
+
+/* ================= WIN ================= */
+#win{
+  position:absolute;
+  inset:0;
+  background:rgba(255,230,240,.95);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  opacity:0;
+  pointer-events:none;
+  backdrop-filter:blur(6px);
+}
+
+#win.show{
+  opacity:1;
+  transition:1s;
+}
+
+#win h1{
+  font-size:2.6rem;
+  color:var(--accent);
+  margin-bottom:10px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- BACKGROUND -->
-<div id="bg"></div>
+<div id="game">
+  <div id="machine"></div>
+  <div id="score">0000</div>
+  <div id="plate">💗 Hug me 10 times</div>
 
-<!-- CHOCOLATE -->
-<div id="choco">
-  <img src="chocolate.jpg">
-  <div id="hint">⬇️ Pull me ⬇️</div>
-</div>
-
-<!-- CONTENT -->
-<div id="content">
-  <h1>Happy Chocolate Day, Swathi Kuttyyyyyy 🍫❤️</h1>
-  <p>
-    To my <b>Gundu Thakkali 🍅</b><br>
-    my favourite snackkkkkk😋😋😋    
-  </p>
-
-  <div class="photo-wrapper" id="photoWrap">
-    <img class="photo" src="swathi.jpg" alt="Swathi">
+  <div id="panel">
+    <div class="hole" id="h1"><div class="hamster"><img src="swathi.jpg"></div></div>
+    <div class="hole" id="h2"><div class="hamster"><img src="swathi.jpg"></div></div>
+    <div class="hole" id="h3"><div class="hamster"><img src="swathi.jpg"></div></div>
+    <div class="hole" id="h4"><div class="hamster"><img src="swathi.jpg"></div></div>
+    <div class="hole" id="h5"><div class="hamster"><img src="swathi.jpg"></div></div>
+    <div class="hole" id="h6"><div class="hamster"><img src="swathi.jpg"></div></div>
+    <div class="hole" id="h7"><div class="hamster"><img src="swathi.jpg"></div></div>
+    <div class="hole" id="h8"><div class="hamster"><img src="swathi.jpg"></div></div>
+    <div class="hole" id="h9"><div class="hamster"><img src="swathi.jpg"></div></div>
+    <div class="hole" id="h10"><div class="hamster"><img src="swathi.jpg"></div></div>
   </div>
 
-  <p>
-    Hottest Chocolate😋😋😋…<br>
-    Eppo enaku kedaikumooooooo therilayeeeeeee😋😋😋😋😋😋
-  </p>
+  <div id="win">
+    <center>
+    <h1>Happy Teddy Dayyyy My Chubby Bear Swathiiii Darlingggg 🧸❤️</h1>
+    <p>I want you to crush me with ur hugsssssssssssssssss</p>
+    </center>
+  </div>
 </div>
 
 <script>
-const choco = document.getElementById("choco");
-const content = document.getElementById("content");
-const bg = document.getElementById("bg");
-const photoWrap = document.getElementById("photoWrap");
+const holes=[...document.querySelectorAll(".hole")];
+const hamsters=[...document.querySelectorAll(".hamster")];
+const scoreEl=document.getElementById("score");
+const plate=document.getElementById("plate");
+const win=document.getElementById("win");
+const panel=document.getElementById("panel");
 
-let startY=0, currentY=0, dragging=false;
+let score=0,gameOver=false;
 
-/* DRAG (mouse + touch) */
-function startDrag(y){
-  dragging=true;
-  startY=y;
-  choco.style.cursor="grabbing";
+function pop(){
+  if(gameOver) return;
+  holes.forEach(h=>h.classList.remove("active"));
+  hamsters.forEach(h=>h.classList.remove("show"));
+  if(Math.random()<0.2) return;
+  const i=Math.floor(Math.random()*holes.length);
+  holes[i].classList.add("active");
+  hamsters[i].classList.add("show");
+  setTimeout(()=>hamsters[i].classList.remove("show"),900);
 }
-function moveDrag(y){
-  if(!dragging) return;
-  currentY=y-startY;
-  if(currentY>0){
-    choco.style.transform=`translate(-50%,${currentY}px)`;
+
+const loop=setInterval(pop,1100);
+
+hamsters.forEach((h,i)=>{
+  h.addEventListener("click",()=>{
+    if(!h.classList.contains("show")||gameOver) return;
+    score+=10;
+    scoreEl.textContent=score.toString().padStart(4,"0");
+
+    heartBurst(holes[i]);
+
+    if(score>=100) end();
+  });
+});
+
+/* 💥 Heart burst */
+function heartBurst(hole){
+  const rect=hole.getBoundingClientRect();
+  for(let i=0;i<8;i++){
+    const heart=document.createElement("div");
+    heart.className="burst-heart";
+    heart.textContent="💗";
+    heart.style.left=rect.left+rect.width/2+"px";
+    heart.style.top=rect.top+rect.height/2+"px";
+    heart.style.setProperty("--x",(Math.random()*120-60)+"px");
+    heart.style.setProperty("--y",(Math.random()*-120)+"px");
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),900);
   }
 }
-function endDrag(){
-  if(!dragging) return;
-  dragging=false;
-  choco.style.cursor="grab";
 
-  if(currentY>160){
-    choco.style.transition="transform 1s ease";
-    choco.style.transform="translate(-50%,120%)";
-    setTimeout(()=>{
-      choco.remove();
-      content.classList.add("show");
-      heartBurst();
-      startChocolateRain();
-    },600);
-  }else{
-    choco.style.transition="transform .4s ease";
-    choco.style.transform="translate(-50%,-50%)";
-  }
-  currentY=0;
-}
-
-choco.addEventListener("mousedown",e=>startDrag(e.clientY));
-window.addEventListener("mousemove",e=>moveDrag(e.clientY));
-window.addEventListener("mouseup",endDrag);
-
-choco.addEventListener("touchstart",e=>startDrag(e.touches[0].clientY));
-window.addEventListener("touchmove",e=>moveDrag(e.touches[0].clientY));
-window.addEventListener("touchend",endDrag);
-
-/* BACKGROUND HEARTS */
-const hearts=["❤️","💖","💗","💘","💕","💝"];
-function spawnBgHeart(){
-  const h=document.createElement("div");
-  h.className="bg-heart";
-  h.innerText=hearts[Math.floor(Math.random()*hearts.length)];
-  h.style.left=Math.random()*100+"vw";
-  h.style.animationDuration=8+Math.random()*8+"s";
-  bg.appendChild(h);
-  setTimeout(()=>h.remove(),18000);
-}
-for(let i=0;i<30;i++) spawnBgHeart();
-setInterval(spawnBgHeart,300);
-
-/* HEART BURST */
-function heartBurst(){
-  for(let i=0;i<16;i++){
+/* 🌧️ Final rain */
+function heartRain(){
+  const rain=setInterval(()=>{
     const h=document.createElement("div");
-    h.className="burst-heart";
-    h.innerText="❤️";
-    h.style.left="50%";
-    h.style.top="50%";
-    h.style.setProperty("--x",(Math.random()*300-150)+"px");
-    h.style.setProperty("--y",(Math.random()*300-150)+"px");
-    photoWrap.appendChild(h);
-    setTimeout(()=>h.remove(),1600);
-  }
+    h.className="rain-heart";
+    h.textContent=["💖","💗","💞","💕"][Math.floor(Math.random()*4)];
+    h.style.left=Math.random()*100+"vw";
+    h.style.animationDuration=3+Math.random()*3+"s";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),6000);
+  },120);
+  setTimeout(()=>clearInterval(rain),6000);
 }
 
-/* CHOCOLATE RAIN */
-function startChocolateRain(){
-  for(let i=0;i<40;i++){
-    setTimeout(()=>{
-      const c=document.createElement("div");
-      c.className="choco";
-      c.innerText="🍫";
-      c.style.left=Math.random()*100+"vw";
-      c.style.animationDuration=2+Math.random()*3+"s";
-      document.body.appendChild(c);
-      setTimeout(()=>c.remove(),5000);
-    },i*120);
-  }
+function end(){
+  gameOver=true;
+  clearInterval(loop);
+  heartRain();
+  setTimeout(()=>win.classList.add("show"),600);
 }
 </script>
 
